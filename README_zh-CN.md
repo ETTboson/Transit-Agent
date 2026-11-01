@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/Logo.png" alt="Transit-Agent 标志" width="128">
+  <img src="assets/Mascot.png" alt="Transit-Agent 吉祥物" width="128">
 </p>
 
 <h1 align="center">Transit-Agent: 面向城市交通分析的自主规划智能体</h1>
