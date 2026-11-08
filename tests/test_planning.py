@@ -5,13 +5,13 @@ import unittest
 from unittest.mock import patch
 import io
 
-from traffic_agent.planning import parse_action, render, inherit_results, execute, engine
-from traffic_agent import planning_tools as tools
+from agent.planning import parse_action, render, inherit_results, execute, engine
+from agent.tools import planning as tools
 
 
 class PlanningTests(unittest.TestCase):
     def test_temporary_credential_uses_hidden_prompt_without_environment_write(self):
-        from traffic_agent import planning
+        from agent import planning
         import os
         before=os.environ.get('DEEPSEEK_API_KEY')
         with patch('sys.argv',['planning','--question','测试问题','--temporary-key']), \

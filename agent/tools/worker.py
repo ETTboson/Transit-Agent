@@ -45,7 +45,7 @@ def protect_evidence(event, args):
 
 sys.addaudithook(protect_evidence)
 try:
-    runpy.run_path(str(Path(__file__).resolve().parents[1] / 'scripts/cambridge_code_worker_v3.py'), run_name='__main__')
+    runpy.run_path(str(Path(__file__).resolve().with_name('code_worker.py')), run_name='__main__')
 finally:
     if contract and contract.get('读取回执'):
         receipt = Path(contract['读取回执']).resolve()

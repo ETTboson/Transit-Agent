@@ -34,7 +34,7 @@ python -m venv .venv
 
 ```bash
 python -m pip install -r requirements.txt
-python -X utf8 -m traffic_agent.planning --data-dir traffic_agent/examples/planning_demo --question "检查资料是否具备开展站点调整分析的条件" --prepare-only
+python -X utf8 -m agent.planning --data-dir benchmark/demo/data --question "检查资料是否具备开展站点调整分析的条件" --prepare-only
 ```
 
 该示例使用虚构资料演示读取接口，检查过程不调用模型 API。
@@ -42,9 +42,30 @@ python -X utf8 -m traffic_agent.planning --data-dir traffic_agent/examples/plann
 准备自己的资料后，可通过当前公交规划入口启动分析：
 
 ```bash
-python -X utf8 -m traffic_agent.planning --data-dir data/my_case --question "分析站点调整对到站条件的影响，提交结果表和地图" --model deepseek-flash --temporary-key
+python -X utf8 -m agent.planning --data-dir data/my_case --question "分析站点调整对到站条件的影响，提交结果表和地图" --model deepseek-flash --temporary-key
 ```
 
 程序会提示输入 API 密钥，并将结果页、分析代码及运行记录保存到 `data/planning_runs/`。
 
-资料格式和更多操作见[详细规划使用说明](docs/Usage_zh-CN.md#准备自己的资料)。Quickstart 对应当前公交规划原型。
+## 仓库结构
+
+```text
+agent/                  模型配置与智能体规划循环
+  tools/                Transit-Agent 工具
+benchmark/              评测框架
+  questions/            评测题目
+  references/           参考流程与答案
+  demo/                 虚构资料接口示例
+evaluate/              评测入口
+tests/                 软件回归测试
+```
+
+`agent/models.py` 保存模型适配与凭据读取逻辑，`agent/runtime.py` 保存规划入口的模型请求设置与共用提示，`agent/planning.py` 定义动作与预算。
+
+使用本地评分程序评测已有运行记录：
+
+```bash
+python -m evaluate.score --scorer /path/to/scorer.py --root /path/to/runs
+```
+
+评分程序提供 `score(root, output)` 函数，`root` 为运行目录，`output` 为新建的评分结果子目录，默认为 `scores`。评分程序的配套模块与参考资料沿用本地目录结构。

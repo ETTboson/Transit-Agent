@@ -5,7 +5,7 @@ import math
 from pyproj import Geod, Transformer
 from shapely.geometry import shape
 from shapely.validation import explain_validity
-from .planning_tools import local_file
+from .planning import local_file
 
 SCOPE = '检查坐标解析、同一对原始点的距离下界及几何结构；不证明站位准确、路径可通行或结论适用于全部居民。'
 GEOD = Geod(ellps='WGS84')

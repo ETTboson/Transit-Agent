@@ -1,6 +1,6 @@
 """公交规划Agent的日常入口：中文问题 → 自主分析 → 可浏览成果。
 
-复用已有DeepSeek接口、资料读取和代码执行器；不改动历史实验。
+使用共用模型接口、资料读取和代码执行器。
 """
 import argparse
 import csv
@@ -16,15 +16,14 @@ import sys
 import time
 from urllib.parse import quote
 
-from . import planning_tools as tools
-from . import spatial_checks
+from .tools import planning as tools
+from .tools import spatial_checks
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT/'scripts'))
-import run_cambridge_harvard_r2 as engine
+from . import runtime as engine
 
-DEFAULT_DATA = ROOT/'data/experiments/cambridge_harvard_r2_20261026/public'
-DEFAULT_QUESTION = ROOT/'traffic_agent/examples/公交站点调整问题.txt'
+DEFAULT_DATA = ROOT/'benchmark/demo/data'
+DEFAULT_QUESTION = ROOT/'benchmark/demo/question.txt'
 INPUT_LIMIT = 300000
 OUTPUT_LIMIT = 48000
 FINAL_RESERVE = 8000
@@ -187,10 +186,10 @@ def execute(code, folder, step, remaining, data=None, access=None, measure=False
     env={k:v for k,v in os.environ.items() if not any(x in k.upper() for x in ['KEY','TOKEN','SECRET','PASSWORD'])}
     env['PYTHONDONTWRITEBYTECODE']='1';start=time.perf_counter()
     try:
-        command=[sys.executable,'-B','-X','utf8',str(ROOT/'traffic_agent/planning_worker.py'),
+        command=[sys.executable,'-B','-X','utf8',str(ROOT/'agent/tools/worker.py'),
                  str(data if data is not None else engine.PUBLIC),str(folder),str(script),*extra]
         if measure:
-            from . import measured_process
+            from .tools import measured_process
             result=measured_process.run(command,timeout=remaining,env=env)
         else:
             p=subprocess.run(command,capture_output=True,text=True,encoding='utf-8',

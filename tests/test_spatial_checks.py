@@ -7,7 +7,8 @@ import unittest
 from unittest.mock import patch
 
 from pyproj import Transformer
-from traffic_agent import planning, spatial_checks as checks
+from agent import planning
+from agent.tools import spatial_checks as checks
 
 
 def fixture(folder):

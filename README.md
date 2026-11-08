@@ -34,7 +34,7 @@ Install dependencies and check the example materials:
 
 ```bash
 python -m pip install -r requirements.txt
-python -X utf8 -m traffic_agent.planning --data-dir traffic_agent/examples/planning_demo --question "Check whether these materials support a bus stop adjustment analysis" --prepare-only
+python -X utf8 -m agent.planning --data-dir benchmark/demo/data --question "Check whether these materials support a bus stop adjustment analysis" --prepare-only
 ```
 
 The example uses synthetic materials to demonstrate the data interface. This check does not call a model API.
@@ -42,9 +42,30 @@ The example uses synthetic materials to demonstrate the data interface. This che
 After preparing your own materials, start an analysis through the current bus planning entry point:
 
 ```bash
-python -X utf8 -m traffic_agent.planning --data-dir data/my_case --question "Analyse how the bus stop changes affect access, and produce a results table and map" --model deepseek-flash --temporary-key
+python -X utf8 -m agent.planning --data-dir data/my_case --question "Analyse how the bus stop changes affect access, and produce a results table and map" --model deepseek-flash --temporary-key
 ```
 
 You will be prompted for an API key. The program saves the results page, analysis code, and run records under `data/planning_runs/`.
 
-See the [detailed planning guide (Chinese)](docs/Usage_zh-CN.md#准备自己的资料) for the data format and further usage. The Quickstart covers the current planning prototype.
+## Repository structure
+
+```text
+agent/                  Model configuration and planning loop
+  tools/                Transit-Agent tools
+benchmark/              Benchmark framework
+  questions/            Questions
+  references/           Reference workflows and answers
+  demo/                 Synthetic data-interface example
+evaluate/              Evaluation entry point
+tests/                 Software regression tests
+```
+
+`agent/models.py` contains model adapters and credentials; `agent/runtime.py` contains planning request settings and the shared prompt. `agent/planning.py` defines actions and budgets.
+
+Run a local scoring program against saved runs:
+
+```bash
+python -m evaluate.score --scorer /path/to/scorer.py --root /path/to/runs
+```
+
+The scoring program exposes `score(root, output)`, where `root` is the run directory and `output` is a new results subdirectory (default: `scores`). Keep its companion modules and reference materials in their existing local layout.
