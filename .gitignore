@@ -9,6 +9,9 @@
 !/agent/models.py
 !/agent/planning.py
 !/agent/runtime.py
+!/agent/domain_context.py
+!/agent/tool_graph.py
+!/agent/tool_demo.py
 !/agent/tools/
 /agent/tools/*
 !/agent/tools/__init__.py
@@ -17,6 +20,10 @@
 !/agent/tools/planning.py
 !/agent/tools/spatial_checks.py
 !/agent/tools/worker.py
+!/agent/tools/catalog.py
+!/agent/tools/runner.py
+!/agent/tools/transit_network.py
+!/agent/tools/transit_spatial.py
 !/assets/
 /assets/*
 !/assets/Logo.png
@@ -48,6 +55,11 @@
 !/tests/test_evaluate.py
 !/tests/test_planning.py
 !/tests/test_spatial_checks.py
+!/tests/test_domain_context.py
+!/tests/test_tool_graph.py
+!/tests/test_transit_network.py
+!/tests/test_transit_spatial.py
+!/tests/test_professional_loop.py
 # Credentials, generated artifacts and local settings remain excluded at every depth.
 .env
 .env.*

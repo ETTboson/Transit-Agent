@@ -6,7 +6,7 @@ import sys
 import json
 
 work = Path(sys.argv[2]).resolve()
-readonly = [work / '前次结果', work / '新资料']
+readonly = [work / '前次结果', work / '新资料', work / 'tool_results', work / 'tool_graph.json', work / 'domain_context.json']
 public = Path(sys.argv[1]).resolve()
 contract = json.loads(Path(sys.argv[4]).read_text(encoding='utf-8')) if len(sys.argv) > 4 else None
 allowed = {Path(p).resolve() for p in contract['可读']} if contract else set()
@@ -18,6 +18,8 @@ tracked = {Path(p).resolve() for p in contract.get('追踪读取', [])} if contr
 read_inputs = set()
 automatic = bool(contract and contract.get('自动记录读写'))
 written_outputs = set()
+graph_manifest = work / 'tool_graph.json'
+graph_nodes = json.loads(graph_manifest.read_text(encoding='utf-8')).get('nodes', {}) if graph_manifest.is_file() else {}
 
 
 def protect_evidence(event, args):
@@ -25,6 +27,8 @@ def protect_evidence(event, args):
         path = Path(os.fsdecode(args[0])).resolve()
         mode, flags = args[1] or '', args[2] or 0
         writing = any(c in mode for c in 'wax+') or bool(flags & (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC))
+        if not writing and path.parent == work / 'tool_results' and graph_nodes.get(path.stem, {}).get('status') != 'valid':
+            raise PermissionError('工具结果已失效；请通过专业工具动作更新对应任务')
         if writing and any(path.is_relative_to(p) for p in readonly):
             raise PermissionError('前次结果和新资料只读；请用新文件保存本次分析')
         if contract and (path.is_relative_to(work) or path.is_relative_to(public)):
