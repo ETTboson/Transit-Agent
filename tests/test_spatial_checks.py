@@ -92,7 +92,7 @@ class SpatialChecksTests(unittest.TestCase):
                  patch.object(planning.engine,'PUBLIC',data), patch.object(planning.engine,'MODEL','模拟'), \
                  contextlib.redirect_stdout(io.StringIO()):
                 folder,trace=planning.run('测试退回和修正',data,'模拟','不使用密钥')
-            self.assertIn('提交未通过',calls[2][-2]['content'])
+            self.assertIn('Submission failed the necessary spatial checks',calls[2][-2]['content'])
             self.assertEqual(trace['步骤'][1]['工具反馈']['状态'],'失败')
             self.assertEqual(trace['空间检查']['状态'],'通过' if repair else '失败')
             self.assertEqual(trace['状态'],'模型已提交，结论待复核' if repair else '空间检查失败，分析未完成')

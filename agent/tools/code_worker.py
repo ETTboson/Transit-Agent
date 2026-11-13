@@ -48,4 +48,4 @@ def audit(event,args):
 
 os.chdir(work)
 sys.addaudithook(audit)
-exec(compiled,{'__name__':'__main__','__file__':str(script),'数据目录':public,'工作目录':work})
+exec(compiled,{'__name__':'__main__','__file__':str(script),'data_dir':public,'work_dir':work,'数据目录':public,'工作目录':work})

@@ -30,6 +30,8 @@ Transit-Agent 结合交通领域 Context、可执行的专业工具和数据依�
 
 Context 定义在 [`agent/domain_context.py`](agent/domain_context.py)，每次规划会话都会加载。
 
+面向模型的 Context 和动作接口使用英文，用户输入及来源资料保留原文，同时兼容旧版中文动作接口。
+
 ### 可执行的专业工具
 
 | 类别 | 工具 | 输入与计算 |
@@ -48,14 +50,14 @@ Context 定义在 [`agent/domain_context.py`](agent/domain_context.py)，每次�
 模型可先读取 GTFS，再引用生成的网络规划出行：
 
 ```json
-{"动作":"专业工具","任务":"feed","工具":"GTFS Reader","参数":{"file":"feed.zip","service_date":"2026-11-11"},"理由":"读取指定服务日的班次"}
+{"action":"professional_tool","task":"feed","tool":"GTFS Reader","params":{"file":"feed.zip","service_date":"2026-11-11"},"reason":"Read scheduled trips for the selected service day"}
 ```
 
 ```json
-{"动作":"专业工具","任务":"route_a","工具":"Multimodal Routing","参数":{"graph":{"结果":"feed","路径":["graph"]},"origin":"A","destination":"B","departure_seconds":28800,"transfer_min_seconds":120,"max_transfers":2},"理由":"按出发时刻计算可搭乘路径"}
+{"action":"professional_tool","task":"route_a","tool":"Multimodal Routing","params":{"graph":{"result":"feed","path":["graph"]},"origin":"A","destination":"B","departure_seconds":28800,"transfer_min_seconds":120,"max_transfers":2},"reason":"Find a feasible itinerary for the departure time"}
 ```
 
-其中 `A`、`B` 为所提供 GTFS 中的站点编号。第二次调用会记录对 `feed` 的依赖，其他依据资料可通过 `"资料依赖":["guide.json"]` 声明。输入更新后，沿依赖关系处理受影响分支。依赖追踪覆盖注册专业工具及其声明的输入，任意 Python 代码另行执行。
+其中 `A`、`B` 为所提供 GTFS 中的站点编号。第二次调用会记录对 `feed` 的依赖，其他依据资料可通过 `"file_dependencies":["guide.json"]` 声明。输入更新后，沿依赖关系处理受影响分支。依赖追踪覆盖注册专业工具及其声明的输入，任意 Python 代码另行执行。
 
 ## 快速开始
 

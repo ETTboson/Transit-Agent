@@ -10,6 +10,7 @@
 !/agent/planning.py
 !/agent/runtime.py
 !/agent/domain_context.py
+!/agent/action_protocol.py
 !/agent/tool_graph.py
 !/agent/tool_demo.py
 !/agent/tools/
@@ -56,6 +57,7 @@
 !/tests/test_planning.py
 !/tests/test_spatial_checks.py
 !/tests/test_domain_context.py
+!/tests/test_action_protocol.py
 !/tests/test_tool_graph.py
 !/tests/test_transit_network.py
 !/tests/test_transit_spatial.py

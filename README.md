@@ -30,6 +30,8 @@ Transit-Agent combines transportation Context, executable domain tools, and a da
 
 The Context is defined in [`agent/domain_context.py`](agent/domain_context.py) and included in each planning session.
 
+The model-facing Context and action protocol use English. User input and source materials retain their original language, and the legacy Chinese action interface remains supported.
+
 ### Executable tools
 
 | Category | Tools | Input and calculation |
@@ -48,14 +50,14 @@ Routing uses an explicit directed graph. Static shortest-path tools compare edge
 The model can read a GTFS feed and pass its graph to a later routing task:
 
 ```json
-{"动作":"专业工具","任务":"feed","工具":"GTFS Reader","参数":{"file":"feed.zip","service_date":"2026-11-11"},"理由":"读取指定服务日的班次"}
+{"action":"professional_tool","task":"feed","tool":"GTFS Reader","params":{"file":"feed.zip","service_date":"2026-11-11"},"reason":"Read scheduled trips for the selected service day"}
 ```
 
 ```json
-{"动作":"专业工具","任务":"route_a","工具":"Multimodal Routing","参数":{"graph":{"结果":"feed","路径":["graph"]},"origin":"A","destination":"B","departure_seconds":28800,"transfer_min_seconds":120,"max_transfers":2},"理由":"按出发时刻计算可搭乘路径"}
+{"action":"professional_tool","task":"route_a","tool":"Multimodal Routing","params":{"graph":{"result":"feed","path":["graph"]},"origin":"A","destination":"B","departure_seconds":28800,"transfer_min_seconds":120,"max_transfers":2},"reason":"Find a feasible itinerary for the departure time"}
 ```
 
-Here `A` and `B` are stop IDs in the supplied feed. The second call records its dependency on `feed`. Additional source documents can be declared with `"资料依赖":["guide.json"]`. Changes to a declared input invalidate the affected branch. Dependency tracking covers registered professional tools and their declared inputs; arbitrary Python code is executed separately.
+Here `A` and `B` are stop IDs in the supplied feed. The second call records its dependency on `feed`. Additional source documents can be declared with `"file_dependencies":["guide.json"]`. Changes to a declared input invalidate the affected branch. Dependency tracking covers registered professional tools and their declared inputs; arbitrary Python code is executed separately.
 
 ## Quickstart
 
